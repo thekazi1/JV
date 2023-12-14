@@ -1,0 +1,41 @@
+
+P-2
+AIM: CREATE A SERVLET FOR A LOGIN PAGE. IF THE USERNAME AND PASSWORD ARE CORRECT THEN IT SAYS MESSAGE “HELLO <USERNAME>” ELSE A MESSAGE “LOGIN FAILED”.
+HTML CODE: index.html
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body align="justify">
+        <form action="Login">
+            Enter the username <input type ="text" name="tuname"><br>
+            Enter the Password<input type="Password" name="tpass"><br>
+            <input type="Submit" value ="Login">
+        </form>
+    </body>
+</html>
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+SERVLET CODE:  Login.java
+package mypack;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+public class Login extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+           String tuname = request.getParameter("tuname");
+           String tpass = request.getParameter("tpass");
+            if(tuname.equals("admin") && (tpass.equals("password")))
+                out.println("<h1> Login Successful</h1>");
+            else
+                out.println("<h1> Login Failed</h1>");           
+        }
+    }
+}
+
+ OUTPUT 1:  Attempt with wrong password

@@ -1,0 +1,74 @@
+P-18 HIT COUNT
+HTML
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form action="HitCounterSevlet">
+            <input type="Submit" value="ser">
+        </form>
+        <div>TODO write content</div>
+    </body>
+</html>
+
+SERVLET
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package mybean;
+
+import javax.ejb.EJB;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import mybean.HitCountBean;
+
+//@WebServlet("/HitCounterSevlet")
+public class HitCounterSevlet extends HttpServlet {
+    @EJB
+    private HitCountBean hitCounterBean;
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        int count = hitCounterBean.incrementAndGetCount();
+
+        out.println("<html><body>");
+        out.println("<h2>Servlet Hit Count</h2>");
+        out.println("<p>This page has been visited " + count + " times.</p>");
+        out.println("</body></html>");
+    }
+}
+
+JBEAN
+package mybean;
+
+import javax.ejb.Singleton;
+
+@Singleton
+public class HitCountBean {
+    private int count = 0;
+
+    public int incrementAndGetCount() {
+        return ++count;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}

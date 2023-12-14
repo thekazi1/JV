@@ -1,0 +1,75 @@
+P-12
+
+AIM: CREATE A REGISTRATION AND LOGIN JSP APPLICATION TO REGISTER AND AUTHENTICATE THE USER BASED ON USERNAME AND PASSWORD USING JDBC. 
+SQL QUERY : create table
+CREATE TABLE USER (USERNAME VARCHAR (100), PASSWORD VARCHAR (100), PASSWORD1 VARCHAR (100), EMAIL VARCHAR (100), COUNTRY VARCHAR (100));
+-----------------------------------------------------------------------------
+HTML CODE : index.html
+<html>
+    <title>Registration page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <form action="registerjsp.jsp" method="Post"><fieldset>    
+            <legend>Registration page:</legend>
+            Enter Username     <br>  <input type="text" name="uname"><br>
+            Enter password     <br>  <input type ="password" name="pass"> <br>
+            Enter password     <br>  <input type ="password" name="pass1"> <br>
+            Enter Your Email   <br>  <input type="email" name="mail"> <br>
+            Enter Your Country <br>  <input type ="text" name ="country"><br>
+            <input type="submit" value="Register">
+        </fieldset>
+      </form>
+ 	</body>
+	</html>
+------------------------------------------------------------------------------
+JSP CODE: registerjsp.jsp
+
+<%@page contentType="text/html" import="java.sql.*"%>
+<html><body>
+        <h1>Registration JSP Page</h1>
+        <%
+            String uname = request.getParameter("uname");
+            String password = request.getParameter("pass");
+            String password1 = request.getParameter("pass1");
+            String email = request.getParameter("mail");
+            String country = request.getParameter("country");
+            if (password.equals(password1)) {
+                try {
+                    Class.forName("com.mysql.jdbc.Driver");
+                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/temp", "root", "root");
+                    PreparedStatement stmt = con.prepareStatement("insert into user values (?,?,?,?)");
+                    stmt.setString(1, uname);
+                    stmt.setString(2, password);
+                    stmt.setString(3, email);
+                    stmt.setString(4, country);
+                    int row = stmt.executeUpdate();
+                    if (row == 1) {
+                        out.println("Registration Successful");
+                    } else {
+                        out.println("Registration FFFFFAAAIIILLLL !!!!");
+        %><jsp:include page="index.html" ></jsp:include>
+        <%
+                }
+            } catch (Exception e) {
+                out.println(e);
+            }
+        } else {
+            out.println("<h1>Password Mismatch</h1>");
+        %>
+        <jsp:include page="index.html" ></jsp:include>
+        <% }
+        %>
+    </body></html>
+-----------------------------------------------------------------------------
+OUTPUT:1 
+
+
+  OUTPUT:
+SELECT * FROM User;
++----------+----------+-------------------+---------+
+| Username | password | email             | country |
++----------+----------+-------------------+---------+
+| Micheal  | 1234     | micheal@gmail.com | India   |
++----------+----------+-------------------+---------+ 

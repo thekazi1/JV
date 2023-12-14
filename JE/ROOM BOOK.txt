@@ -1,0 +1,86 @@
+P-11
+AIM: ROOM BOOKING 
+SQL QUERY: CREATE TABLE
+mysql> CREATE TABLE rmbook( roomid int (10), roomtype char (20), Charges int (10), customer char (20), cContact int (10), Status char (10));
+ADD DATA
+INSERT INTO rmbook(roomid,roomtype,charges) VALUES (101,"SuperDulex",7000), (102,"SuperDulex",7000), (201,"Suit",9000),(202,"Suit",9000), (301,"Dulex",6000), (302,"Dulex",6000);
+CHANGE STATUS TO NOT BOOKED
+mysql> UPDATE rmbook SET status = "NOT BOOKED" WHERE status IS NULL;
+------------------------------------------------------------------------------
+HTML CODE: index.html
+<form action="RBServlet" >
+ Select a room Type
+<input type="radio" name="txtType" value="Dulex">Dulex
+<input type="radio" name="txtType" value="SuperDulex">Super Dulex
+<input type="radio" name="txtType" value="Suit">Suit<br>
+ Enter Your Name<input type="text" name="txtCust" ><br>
+ Enter Mobile No.<input type="text" name="txtMob" ><br>
+<input type="reset" ><input type="submit" value="Book Room">
+</form>
+-----------------------------------------------------------------------------
+SERVLET CODE: RBServlet.java 
+package mypack;
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.ejb.EJB;
+import mybeans.RRBean;
+
+public class RBServlet extends HttpServlet {
+
+    @EJB
+    RRBean obj;
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        String rt = request.getParameter("txtType");
+        String cn = request.getParameter("txtCust");
+        String cm = request.getParameter("txtMob");
+        String msg = obj.romBook(rt, cn, cm);
+        out.println(msg);
+    }
+}
+-----------------------------------------------------------------------------
+SESSIONBEANS CODE: RRBean.java
+package mybeans;
+import javax.ejb.Stateless;
+import java.sql.*;
+@Stateless
+public class RRBean {
+    public RRBean() {
+    }
+    public String romBook(String rt, String cn, String cm) {
+        String msg = "";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/temp", "root", "root");
+            String query = "select * from rmbook where RoomType=? and status='Not Booked'";
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1, rt);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                String rno = rs.getString(1);
+                PreparedStatement stm1 = con.prepareStatement("update rmbook set customer=? where RoomId=? ");
+                PreparedStatement stm2 = con.prepareStatement("update rmbook set ccontact=? where RoomId=? ");
+                PreparedStatement stm3 = con.prepareStatement("update rmbook set status=? where RoomId=? ");
+                stm1.setString(1, cn);
+                stm1.setString(2, rno);
+                stm2.setString(1, cm);
+                stm2.setString(2, rno);
+                stm3.setString(1, "Booked");
+                stm3.setString(2, rno);
+                stm1.executeUpdate();
+                stm2.executeUpdate();
+                stm3.executeUpdate();
+                msg = "<h1> Room " + rno + " Booked  " + "Charges = " + rs.getString(3) + "<h1>";
+            } else {
+                msg = "<h1>Room " + rt + " currently Not available<h1>";
+            }
+        } catch (Exception e) {
+            msg = "" + e;
+        }
+        return msg;
+    }
+}

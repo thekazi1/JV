@@ -1,0 +1,49 @@
+P-16
+AIM: EXPRESSION LANGUAGE JSP
+
+HTML CODE: index.html
+<html>
+    <head>
+        <title>to view jsp page using anchor tag</title>          
+    </head>
+    <body>
+        <a href="switchcase.jsp"> OPEN JSP PAGE</a>
+    </body>
+</html>
+-----------------------------------------------------------------------------
+JSP CODE.: switchcase.jsp
+<%@page language="java" contentType="text/html" pageEncoding="UTF-8"%>
+<html>
+    <head>
+        <title>Expression language by JSP</title>
+    </head>
+    <body>
+        <%! int week = 6; %>
+        <% switch (week){
+            case 1:
+                out.println("MONDAY");
+                break;
+            case 2:
+                out.println("TUESDAY");
+                break;
+            case 3:
+                out.println("WEDNESDAY");
+                break;
+            case 4:
+                out.println("THURSDAY");
+                break;
+            case 5:
+                out.println("FRIDAY");
+                break;
+            case 6:
+                out.println("SATRURDAY");
+                break;
+            case 7:
+                out.println("SUnDAY");
+                break;
+            default:
+                out.println("EnTER The correct vaLUE");
+                  break;}
+         %>       
+    </body>
+</html>

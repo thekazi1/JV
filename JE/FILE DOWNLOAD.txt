@@ -1,0 +1,52 @@
+P-14
+AIM: FILE DOWNLOAD WEBAPP
+NOTE: PUT DOWNLOAD FILE IN THIS FOLDER BEFORE RUNNING THE PROGRAM.
+
+HTML CODE: index.html
+<html>
+    <head>
+        <title>File Download Page</title>
+    </head>
+    <body>
+        <h1>File Download Application</h1>
+        Click <a href="DownloadServlet?filename=temp.pdf">BOOK</a>
+        <br/><br/>
+        Click <a href="DownloadServlet?filename=index.html">HTML page</a>
+    </body>
+</html>
+-----------------------------------------------------------------------------
+SERVLET CODE: DownloadServlet.java
+package filedownloadapp;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class DownloadServlet extends HttpServlet {
+
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        String filename = request.getParameter("filename");
+        ServletContext context = getServletContext();
+        PrintWriter out;
+        //ServletOutputStream out = response.getOutputStream(); // any of the two works
+        try (InputStream is = context.getResourceAsStream("/" + filename)) {
+            //ServletOutputStream out = response.getOutputStream(); // any of the two works
+            out = response.getWriter();
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\""); // 
+//if comment this statement then it wl ask you about the editor with which you want to open the file
+            int i;
+            while ((i = is.read()) != -1) {
+                out.write(i);
+            }
+        }
+        out.close();
+    }
+}

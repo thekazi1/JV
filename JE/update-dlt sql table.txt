@@ -1,0 +1,112 @@
+P-5
+AIM: CREATE AN HTML PAGE WITH FIELDS, ENO, NAME, AGE,  SALARY. NOW ON SUBMIT THIS DATA TO A JSP PAGE WHICH WILL UPDATE THE EMPLOYEE TABLE OF DATABASE WITH MATCHING ENO.
+SQL COMMAND CREATE TABLE
+--CREATE TABLE EMP(cus_id int(10), cus_name varchar(30), cus_age int(3), cus_salary int(10));
+-- insert into emp values(1, 'user1', 33, 12323);
+--create new database
+--create database sf
+--\u sf
+--Create table Emp(Cus_Id Int(4), Cus_Name Varchar(22), Cus_Age Int(3), Cus_Sal varchar(6));
+--Show tables
+--desc emp; -------[to show row/coloumn]
+--insert into emp values(1,"User",33,4500)
+--Select * from emp
+{JDBC Driver not found : Project - Lib - AddJar-My.Sql.Connector}
+
+ PreparedStatement pst1= con.prepareStatement("delete from emp where cus_id =?" );//to delete data  18:50 14-12-2023;
+
+
+HTML CODE: index.html
+<html>
+    <head>
+        <title>Update user data in sql table</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form action="Updatedata.jsp">
+            <center>
+            Enter the Employee number<input type='text' name ='tid'>
+            <br>
+            Enter Name of Employee<input type='text' name='tname'>
+            <br>
+            Enter Salary<input type='text' name ='salary'>
+            <br>
+            Enter age <input type="text" name ="age">
+            <input type ="reset">
+            <input type = "submit">
+            </center>
+        </form>
+    </body>
+</html>
+¬¬¬¬¬¬¬¬¬----------------------------------------------------------------------------
+
+JSP CODE: Updatedata.jsp
+
+<%@page contentType="text/html" import="java.sql.*" %>
+<html><body>
+<h1>Employee Record Update</h1>
+<%
+ String cus_id=request.getParameter("tid"); 
+ String cus_name=request.getParameter("tname");
+ String cus_age = request.getParameter("age");
+ String cus_salary = request.getParameter("salary");
+
+ try{
+
+ Class.forName("com.mysql.jdbc.Driver");
+ Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/temp","root","root");
+ PreparedStatement stmt = con.prepareStatement("select * from emp where cus_id=?");
+ stmt.setString(1, cus_id); 
+ ResultSet rs = stmt.executeQuery();
+ if(rs.next()){
+ out.println("<h1>~~~ Employee " +cus_name+" Exist ~~~ </h1>");
+  PreparedStatement pst1= con.prepareStatement("update emp set cus_salary=? where cus_id=?");
+ PreparedStatement pst2= con.prepareStatement("update emp set cus_age=? where cus_id=?");
+
+ pst1.setString(1, cus_salary); 
+ pst1.setString(2, cus_id);
+ pst2.setString(1, cus_age); 
+ pst2.setString(2, cus_id);
+
+
+pst1.executeUpdate();
+ pst2.executeUpdate();
+ }
+else{
+ out.println("<h1 align= center>Employee Record not exist !!!!!</h1>");
+ }
+ }catch(Exception e){out.println(e);}
+ %></body></html>
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+OUTPUT:
+Mysql table before update.
+mysql> select * from emp;
+
+
+
++----------+--------------+-------------+---------------+
+| cus_id | cus_name | cus_age | cus_salary |
++----------+--------------+-------------+---------------+
+|      1     | employ1  |      21        |      13000   |
+|      2     | employ2  |      20        |      20000   |
+|      3     | employ3  |      30        |     300000  |
++----------+--------------+-------------+---------------+
+
+Insert data to update on page
+
+
+mysql table after submitting
+
++--------+----------+---------+------------+
+| cus_id | cus_name | cus_age | cus_salary |
++--------+----------+---------+------------+
+|      1 | employ1  |      21 |      13000 |
+|      2 | employ2  |      20 |      20000 |
+|      3 | employ3  |      33 |      35000 |
++--------+----------+---------+------------+

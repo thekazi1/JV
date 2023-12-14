@@ -1,0 +1,60 @@
+P-4
+
+AIM: DISPLAY IMPLICIT OBJECTS BY JSP.
+JSP CODE: 
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <h1>Use of Intrinsic object in JSP</h1>
+        <h1>Request Object</h1>
+        Query String <%=request.getQueryString() %><br>
+        Context Path <%=request.getContextPath() %><br>
+        Remote Host <%=request.getRemoteHost() %><br>
+        <h1>Response Object</h1>
+        Character Encoding Type <%=request.getCharacterEncoding() %><br>
+        Content Type <%=request.getContentType() %><br>
+        Locale <%=request.getLocale() %><br>
+
+        <h1>Session Object </h1>
+        ID <%=session.getId() %><br>
+        Creation Time <%= new java.util.Date(session.getCreationTime()) %> <br>
+        Last Access Time <%= new java.util.Date(session.getLastAccessedTime()) %>
+---------------------------------------------------------------------------------------------
+chatgpt---
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Implicit Objects Example</title>
+</head>
+<body>
+
+<h1>Implicit Objects Example</h1>
+
+<%
+    // Getting values from implicit objects
+    String requestValue = (String) request.getAttribute("attributeName");
+    String sessionValue = (String) session.getAttribute("attributeName");
+    String applicationValue = (String) application.getAttribute("attributeName");
+    String paramValue = request.getParameter("paramName");
+    String outValue = "Hello from implicit out object!";
+
+    // Setting values to implicit objects
+    request.setAttribute("attributeName", "Value from Request");
+    session.setAttribute("attributeName", "Value from Session");
+    application.setAttribute("attributeName", "Value from Application");
+%>
+
+<p>Value from Request: <%= requestValue %></p>
+<p>Value from Session: <%= sessionValue %></p>
+<p>Value from Application: <%= applicationValue %></p>
+<p>Value from Parameter: <%= paramValue %></p>
+<p>Value from Out Object: <%= outValue %></p>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+P-7
+AIM : VALIDATE USING JSP
+HTML CODE: index.html
+<html>
+    <head>
+        <title>validate user by jsp</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body><form action="Validate" method="Post"> <fieldset><legend>Login Page</legend>
+                Enter Username <br><input type="text" name='uname'>    <br>
+                Enter Password <br><input type='password' name='pass'> <br>        
+                <input type="submit" value="Login">
+            </fieldset>
+        </form>
+    </body>
+</html>
+-----------------------------------------------------------------------------
+JSP CODE: Validate.java
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+public class Validate extends HttpServlet {
+  public void doPost(HttpServletRequest req, HttpServletResponse res)
+      throws IOException, ServletException {
+    res.setContentType("text/html");
+    PrintWriter out = res.getWriter();
+    String username = req.getParameter("uname");
+    String password = req.getParameter("pass");
+    if (password.equals("Servlet")) {
+      req.setAttribute("username", username);
+      req.setAttribute("password", password);
+      RequestDispatcher rd = req.getRequestDispatcher("/Welcome");
+      rd.forward(req, res);
+    }
+    else {
+      out.print("Incorrect password");
+      RequestDispatcher rd = req.getRequestDispatcher("/index.html");
+      rd.include(req, res);
+    }
+  }}
+-----------------------------------------------------------------------------
+JSP CODE: Welcome.java
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+public class Welcome extends HttpServlet {
+  public void doPost(HttpServletRequest req, HttpServletResponse res)
+      throws ServletException, IOException {
+    res.setContentType("text/html");
+    try (PrintWriter out = res.getWriter()) {
+      String username = (String) req.getAttribute("username");
+      String s2password = (String) req.getAttribute("s2password");
+      out.println("<h1>Welcome " + username + "</h1>");
+    }
+  }
+} 
+
+OUTPUT: FIRST ATTEMPT WITH WRONG PASSWORD
+OUTPUT : SECOND ATTEMPT WITH RIGHT PASSWORD 

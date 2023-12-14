@@ -1,0 +1,126 @@
+P-17
+AIM: USE JDBC FOR DATA INSERTION FOR VALID USER.
+SQL QUERY : create table
+CREATE TABLE USER1 (NAME VARCHAR(10), EMAIL VARCHAR (100), COUNTRY CHAR (20));
+HTML CODE: index.html
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body><fieldset> <legend>  JDBC Data Insertion   </legend>
+        <form action="Validate1" method="Post">
+        USERNAME <br><input type="text" name="uname"><br>
+        PASSWORD <br><input type ="password" name="pass"><br>
+        <input type="submit" value="Login">
+        </form></fieldset>
+
+    </body>
+</html>
+-----------------------------------------------------------------------------
+Servlet Code: Validate1
+package mypack;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class Validate1 extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            String tuname = request.getParameter("uname");
+            String tpass = request.getParameter("pass");
+            if (tuname.equals("a") && (tpass.equals("p"))) {
+                out.println("<a href=\"Register.html\"> <h1>Insert DATA</h1></a>");
+            } else {
+                out.println("<h1>Login Failed</h1>");
+            }
+        }
+    }
+}
+-----------------------------------------------------------------------------
+HTML CODE: Register.html
+<html>
+    <head>
+        <title>Registration page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form action="Registration" method="Post"><fieldset>
+            <Legend>Registration page:</legend>
+                Enter Username <br>
+            <input type="text" name="uname"><br>
+            Enter email<br>
+            <input type="email" name="mail"> <br>
+            Enter Your Country <br>
+            <input type ="text" name ="country"><br>
+            <input type="submit" value="Register">            
+            </fieldset>      </form>    
+    </body>
+</html>
+-----------------------------------------------------------------------------
+SERVLET CODE: Registation.java
+package mypack;
+
+import java.sql.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+
+public class Registration extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Connection con = null;
+        PreparedStatement ps = null;
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        String duname = request.getParameter("uname");
+        String dpassword = request.getParameter("pass");
+        String demail = request.getParameter("mail");
+        String dcountry = request.getParameter("country");
+
+        response.setContentType("text/html;charset=UTF-8");
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/temp", "root", "root");
+            out.println("connection done successfully...");
+            ps = con.prepareStatement("insert into user1 values (?,?,?)");
+            ps.setString(1, duname);
+            ps.setString(2, demail);
+            ps.setString(3, dcountry);
+            ps.execute();
+            out.print("Registered  successfully!!!!");
+        } catch (Exception e) {
+        }
+    }
+}
+
+
+
+
+OUTPUT
+AFTER SUCCESSFULL LOGIN ADMIN GET THE ACCESS OF DATA 
+¬¬ 
+
+
+SQL OUTPUT:
+mysql> select * from user1;
++----------+--------------------------+--------+
+| username |email                     | country|
++----------+--------------------------+--------+
+| user 1   | sehabipebu@jollyfree.com | India  |
++----------+--------------------------+--------+
+

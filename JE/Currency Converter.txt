@@ -1,0 +1,52 @@
+P-6
+CREATE A CURRENCY CONVERTER APPLICATION USING EJB.
+HTML CODE: index.html
+
+<html>
+    <head>
+        <title>Currency Converter</title>
+    </head>
+<body>
+    <form action="convert" ><fieldset><legend> Currency Convertor</legend>
+    Enter INR to convert: <br>
+    <input type="text" name="amount"><br>
+Select Conversion Type<br>
+<input type="radio" name="type" value="r2d" checked>Rupees to Dollar><br>
+<input type="radio" name="type" value="d2r" >Dollar to Rupees<br>
+<input type="reset" ><input type="submit" value="CONVERT" >
+        </fieldset> </form> </body> </html>
+-----------------------------------------------------------------------------
+SERVLET CODE: convert.java
+package mypack;
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.ejb.EJB;
+import mybeans.ccbeans;
+public class convert extends HttpServlet {
+ @EJB ccbeans obj;
+public void doGet(HttpServletRequest request, HttpServletResponse response)
+ throws ServletException, IOException {
+ response.setContentType("text/html;charset=UTF-8");
+PrintWriter out = response.getWriter();
+double amount = Double.parseDouble(request.getParameter("amount"));
+if(request.getParameter("type").equals("r2d"))
+{
+out.println("<h1>"+amount+ " Rupees = "+obj.r2Dollor(amount)+" Dollors</h1>");
+}
+if(request.getParameter("type").equals("d2r"))
+{
+out.println("<h1>"+amount+ " Dollors = "+obj.d2Rupees(amount)+" Rupees</h1>");
+}
+}}
+BEAN CODE: ccbeans.java
+
+package mybeans;
+import javax.ejb.Stateless;
+@Stateless
+public class ccbeans {
+public ccbeans(){}
+public double r2Dollor(double r){ return r/82.04; }
+public double d2Rupees(double d) {return d*82.04;}
+}
+-----------------------------------------------------------------------------

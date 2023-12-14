@@ -1,0 +1,47 @@
+P-3
+AIM: TO FIND OF NUMBER OF TIMES USER VISITED PAGE USING COOKIES.
+
+
+HTML CODE: index.html
+<html> <head>
+<title>Login Form</title> <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head> 
+
+<body>
+    <form action="Cookie" ><fieldset><legend> Cookies count</legend>
+<center><h1>Login Cookie For Demo</h1></center>
+Enter User ID <input type="text" name="txtId"><br><br>
+Enter Password<input type="password" name="txtPass"><br><br> <input type="reset">
+<input type="submit" value=" click to Login " > 
+</fieldset></form>
+</body>
+</html>
+------------------------------------------------------------------------------
+SERVLET CODE: Cookie.java
+package mypack;
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+public class Cookie extends HttpServlet
+{
+static int i=1;
+
+public void doGet (HttpServletRequest request, HttpServletResponse response)
+throws IOException, ServletException
+{
+response.setContentType ("text/html");
+PrintWriter out = response.getWriter();
+String k=String.valueOf(i);
+javax.servlet.http.Cookie c = new javax.servlet.http.Cookie ("visit", k);
+response.addCookie(c) ;
+int j=Integer.parseInt (c.getValue ()) ;
+if (j==1)
+out.println("<h1>Welcome</h1<");
+else
+out.println("<h3>Ooh Shit Your are again</h3›<br>");
+out.println("You visited "+i+" times");
+i++;}}
+OUTPUT:
+New Login:
+Relogin: 
